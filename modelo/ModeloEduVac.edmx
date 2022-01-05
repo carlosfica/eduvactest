@@ -1,0 +1,309 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+  <!-- EF Runtime content -->
+  <edmx:Runtime>
+    <!-- SSDL content -->
+    <edmx:StorageModels>
+    <Schema Namespace="EduVacModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+        <EntityType Name="ALUMNOS">
+          <Key>
+            <PropertyRef Name="cod_alumno" />
+          </Key>
+          <Property Name="cod_alumno" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="rut_alumno" Type="varchar" MaxLength="20" Nullable="false" />
+          <Property Name="nombre_alumno" Type="varchar" MaxLength="50" Nullable="false" />
+          <Property Name="apellido_alumno" Type="varchar" MaxLength="50" Nullable="false" />
+          <Property Name="correo_alumno" Type="varchar" MaxLength="50" Nullable="false" />
+        </EntityType>
+        <EntityType Name="ENVIOCODIGOQR">
+          <Key>
+            <PropertyRef Name="cod_codigo" />
+          </Key>
+          <Property Name="cod_codigo" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="fk_alumno" Type="int" Nullable="false" />
+          <Property Name="fecha_envio" Type="datetime" />
+        </EntityType>
+        <EntityType Name="QRENTRADA">
+          <Key>
+            <PropertyRef Name="cod_codigo2" />
+          </Key>
+          <Property Name="cod_codigo2" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="fk_sala" Type="int" Nullable="false" />
+          <Property Name="fk_qr" Type="int" Nullable="false" />
+          <Property Name="fecha_entrada" Type="datetime" Nullable="false" />
+        </EntityType>
+        <EntityType Name="SALAS">
+          <Key>
+            <PropertyRef Name="cod_sala" />
+          </Key>
+          <Property Name="cod_sala" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="numero_sala" Type="int" Nullable="false" />
+          <Property Name="nombre_sala" Type="varchar" MaxLength="10" Nullable="false" />
+          <Property Name="aforo_sala" Type="int" Nullable="false" />
+        </EntityType>
+        <EntityType Name="USUARIOS">
+          <Key>
+            <PropertyRef Name="cod_usuario" />
+          </Key>
+          <Property Name="cod_usuario" Type="int" StoreGeneratedPattern="Identity" Nullable="false" />
+          <Property Name="rut_usuario" Type="varchar" MaxLength="20" Nullable="false" />
+          <Property Name="nombre_usuario" Type="varchar" MaxLength="50" Nullable="false" />
+          <Property Name="apellido_usuario" Type="varchar" MaxLength="50" Nullable="false" />
+          <Property Name="correo_usuario" Type="varchar" MaxLength="50" Nullable="false" />
+          <Property Name="usuario_admin" Type="int" Nullable="false" />
+          <Property Name="pass_hash" Type="varchar" MaxLength="255" Nullable="false" />
+          <Property Name="username" Type="varchar" MaxLength="20" Nullable="false" />
+        </EntityType>
+        <Association Name="fkalumno">
+          <End Role="ALUMNOS" Type="Self.ALUMNOS" Multiplicity="1" />
+          <End Role="ENVIOCODIGOQR" Type="Self.ENVIOCODIGOQR" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="ALUMNOS">
+              <PropertyRef Name="cod_alumno" />
+            </Principal>
+            <Dependent Role="ENVIOCODIGOQR">
+              <PropertyRef Name="fk_alumno" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="fkcodigoqr">
+          <End Role="ENVIOCODIGOQR" Type="Self.ENVIOCODIGOQR" Multiplicity="1" />
+          <End Role="QRENTRADA" Type="Self.QRENTRADA" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="ENVIOCODIGOQR">
+              <PropertyRef Name="cod_codigo" />
+            </Principal>
+            <Dependent Role="QRENTRADA">
+              <PropertyRef Name="fk_qr" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="fksala">
+          <End Role="SALAS" Type="Self.SALAS" Multiplicity="1" />
+          <End Role="QRENTRADA" Type="Self.QRENTRADA" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="SALAS">
+              <PropertyRef Name="cod_sala" />
+            </Principal>
+            <Dependent Role="QRENTRADA">
+              <PropertyRef Name="fk_sala" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityContainer Name="EduVacModelStoreContainer">
+          <EntitySet Name="ALUMNOS" EntityType="Self.ALUMNOS" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="ENVIOCODIGOQR" EntityType="Self.ENVIOCODIGOQR" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="QRENTRADA" EntityType="Self.QRENTRADA" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="SALAS" EntityType="Self.SALAS" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="USUARIOS" EntityType="Self.USUARIOS" Schema="dbo" store:Type="Tables" />
+          <AssociationSet Name="fkalumno" Association="Self.fkalumno">
+            <End Role="ALUMNOS" EntitySet="ALUMNOS" />
+            <End Role="ENVIOCODIGOQR" EntitySet="ENVIOCODIGOQR" />
+          </AssociationSet>
+          <AssociationSet Name="fkcodigoqr" Association="Self.fkcodigoqr">
+            <End Role="ENVIOCODIGOQR" EntitySet="ENVIOCODIGOQR" />
+            <End Role="QRENTRADA" EntitySet="QRENTRADA" />
+          </AssociationSet>
+          <AssociationSet Name="fksala" Association="Self.fksala">
+            <End Role="SALAS" EntitySet="SALAS" />
+            <End Role="QRENTRADA" EntitySet="QRENTRADA" />
+          </AssociationSet>
+        </EntityContainer>
+      </Schema></edmx:StorageModels>
+    <!-- CSDL content -->
+    <edmx:ConceptualModels>
+      <Schema Namespace="EduVacModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+        <EntityType Name="ALUMNOS">
+          <Key>
+            <PropertyRef Name="cod_alumno" />
+          </Key>
+          <Property Name="cod_alumno" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="rut_alumno" Type="String" MaxLength="20" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="nombre_alumno" Type="String" MaxLength="50" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="apellido_alumno" Type="String" MaxLength="50" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="correo_alumno" Type="String" MaxLength="50" FixedLength="false" Unicode="false" Nullable="false" />
+          <NavigationProperty Name="ENVIOCODIGOQR" Relationship="Self.fkalumno" FromRole="ALUMNOS" ToRole="ENVIOCODIGOQR" />
+        </EntityType>
+        <EntityType Name="ENVIOCODIGOQR">
+          <Key>
+            <PropertyRef Name="cod_codigo" />
+          </Key>
+          <Property Name="cod_codigo" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="fk_alumno" Type="Int32" Nullable="false" />
+          <Property Name="fecha_envio" Type="DateTime" Precision="3" />
+          <NavigationProperty Name="ALUMNOS" Relationship="Self.fkalumno" FromRole="ENVIOCODIGOQR" ToRole="ALUMNOS" />
+          <NavigationProperty Name="QRENTRADA" Relationship="Self.fkcodigoqr" FromRole="ENVIOCODIGOQR" ToRole="QRENTRADA" />
+        </EntityType>
+        <EntityType Name="QRENTRADA">
+          <Key>
+            <PropertyRef Name="cod_codigo2" />
+          </Key>
+          <Property Name="cod_codigo2" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="fk_sala" Type="Int32" Nullable="false" />
+          <Property Name="fk_qr" Type="Int32" Nullable="false" />
+          <Property Name="fecha_entrada" Type="DateTime" Nullable="false" Precision="3" />
+          <NavigationProperty Name="ENVIOCODIGOQR" Relationship="Self.fkcodigoqr" FromRole="QRENTRADA" ToRole="ENVIOCODIGOQR" />
+          <NavigationProperty Name="SALAS" Relationship="Self.fksala" FromRole="QRENTRADA" ToRole="SALAS" />
+        </EntityType>
+        <EntityType Name="SALAS">
+          <Key>
+            <PropertyRef Name="cod_sala" />
+          </Key>
+          <Property Name="cod_sala" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="numero_sala" Type="Int32" Nullable="false" />
+          <Property Name="nombre_sala" Type="String" MaxLength="10" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="aforo_sala" Type="Int32" Nullable="false" />
+          <NavigationProperty Name="QRENTRADA" Relationship="Self.fksala" FromRole="SALAS" ToRole="QRENTRADA" />
+        </EntityType>
+        <EntityType Name="USUARIOS">
+          <Key>
+            <PropertyRef Name="cod_usuario" />
+          </Key>
+          <Property Name="cod_usuario" Type="Int32" Nullable="false" annotation:StoreGeneratedPattern="Identity" />
+          <Property Name="rut_usuario" Type="String" MaxLength="20" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="nombre_usuario" Type="String" MaxLength="50" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="apellido_usuario" Type="String" MaxLength="50" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="correo_usuario" Type="String" MaxLength="50" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="usuario_admin" Type="Int32" Nullable="false" />
+          <Property Name="pass_hash" Type="String" MaxLength="255" FixedLength="false" Unicode="false" Nullable="false" />
+          <Property Name="username" Type="String" MaxLength="20" FixedLength="false" Unicode="false" Nullable="false" />
+        </EntityType>
+        <Association Name="fkalumno">
+          <End Role="ALUMNOS" Type="Self.ALUMNOS" Multiplicity="1" />
+          <End Role="ENVIOCODIGOQR" Type="Self.ENVIOCODIGOQR" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="ALUMNOS">
+              <PropertyRef Name="cod_alumno" />
+            </Principal>
+            <Dependent Role="ENVIOCODIGOQR">
+              <PropertyRef Name="fk_alumno" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="fkcodigoqr">
+          <End Role="ENVIOCODIGOQR" Type="Self.ENVIOCODIGOQR" Multiplicity="1" />
+          <End Role="QRENTRADA" Type="Self.QRENTRADA" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="ENVIOCODIGOQR">
+              <PropertyRef Name="cod_codigo" />
+            </Principal>
+            <Dependent Role="QRENTRADA">
+              <PropertyRef Name="fk_qr" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="fksala">
+          <End Role="SALAS" Type="Self.SALAS" Multiplicity="1" />
+          <End Role="QRENTRADA" Type="Self.QRENTRADA" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="SALAS">
+              <PropertyRef Name="cod_sala" />
+            </Principal>
+            <Dependent Role="QRENTRADA">
+              <PropertyRef Name="fk_sala" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityContainer Name="EduVacEntities" annotation:LazyLoadingEnabled="true">
+          <EntitySet Name="ALUMNOS" EntityType="Self.ALUMNOS" />
+          <EntitySet Name="ENVIOCODIGOQR" EntityType="Self.ENVIOCODIGOQR" />
+          <EntitySet Name="QRENTRADA" EntityType="Self.QRENTRADA" />
+          <EntitySet Name="SALAS" EntityType="Self.SALAS" />
+          <EntitySet Name="USUARIOS" EntityType="Self.USUARIOS" />
+          <AssociationSet Name="fkalumno" Association="Self.fkalumno">
+            <End Role="ALUMNOS" EntitySet="ALUMNOS" />
+            <End Role="ENVIOCODIGOQR" EntitySet="ENVIOCODIGOQR" />
+          </AssociationSet>
+          <AssociationSet Name="fkcodigoqr" Association="Self.fkcodigoqr">
+            <End Role="ENVIOCODIGOQR" EntitySet="ENVIOCODIGOQR" />
+            <End Role="QRENTRADA" EntitySet="QRENTRADA" />
+          </AssociationSet>
+          <AssociationSet Name="fksala" Association="Self.fksala">
+            <End Role="SALAS" EntitySet="SALAS" />
+            <End Role="QRENTRADA" EntitySet="QRENTRADA" />
+          </AssociationSet>
+        </EntityContainer>
+      </Schema>
+    </edmx:ConceptualModels>
+    <!-- C-S mapping content -->
+    <edmx:Mappings>
+      <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
+        <EntityContainerMapping StorageEntityContainer="EduVacModelStoreContainer" CdmEntityContainer="EduVacEntities">
+          <EntitySetMapping Name="ALUMNOS">
+            <EntityTypeMapping TypeName="EduVacModel.ALUMNOS">
+              <MappingFragment StoreEntitySet="ALUMNOS">
+                <ScalarProperty Name="cod_alumno" ColumnName="cod_alumno" />
+                <ScalarProperty Name="rut_alumno" ColumnName="rut_alumno" />
+                <ScalarProperty Name="nombre_alumno" ColumnName="nombre_alumno" />
+                <ScalarProperty Name="apellido_alumno" ColumnName="apellido_alumno" />
+                <ScalarProperty Name="correo_alumno" ColumnName="correo_alumno" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="ENVIOCODIGOQR">
+            <EntityTypeMapping TypeName="EduVacModel.ENVIOCODIGOQR">
+              <MappingFragment StoreEntitySet="ENVIOCODIGOQR">
+                <ScalarProperty Name="cod_codigo" ColumnName="cod_codigo" />
+                <ScalarProperty Name="fk_alumno" ColumnName="fk_alumno" />
+                <ScalarProperty Name="fecha_envio" ColumnName="fecha_envio" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="QRENTRADA">
+            <EntityTypeMapping TypeName="EduVacModel.QRENTRADA">
+              <MappingFragment StoreEntitySet="QRENTRADA">
+                <ScalarProperty Name="cod_codigo2" ColumnName="cod_codigo2" />
+                <ScalarProperty Name="fk_sala" ColumnName="fk_sala" />
+                <ScalarProperty Name="fk_qr" ColumnName="fk_qr" />
+                <ScalarProperty Name="fecha_entrada" ColumnName="fecha_entrada" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="SALAS">
+            <EntityTypeMapping TypeName="EduVacModel.SALAS">
+              <MappingFragment StoreEntitySet="SALAS">
+                <ScalarProperty Name="cod_sala" ColumnName="cod_sala" />
+                <ScalarProperty Name="numero_sala" ColumnName="numero_sala" />
+                <ScalarProperty Name="nombre_sala" ColumnName="nombre_sala" />
+                <ScalarProperty Name="aforo_sala" ColumnName="aforo_sala" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="USUARIOS">
+            <EntityTypeMapping TypeName="EduVacModel.USUARIOS">
+              <MappingFragment StoreEntitySet="USUARIOS">
+                <ScalarProperty Name="cod_usuario" ColumnName="cod_usuario" />
+                <ScalarProperty Name="rut_usuario" ColumnName="rut_usuario" />
+                <ScalarProperty Name="nombre_usuario" ColumnName="nombre_usuario" />
+                <ScalarProperty Name="apellido_usuario" ColumnName="apellido_usuario" />
+                <ScalarProperty Name="correo_usuario" ColumnName="correo_usuario" />
+                <ScalarProperty Name="usuario_admin" ColumnName="usuario_admin" />
+                <ScalarProperty Name="pass_hash" ColumnName="pass_hash" />
+                <ScalarProperty Name="username" ColumnName="username" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+        </EntityContainerMapping>
+      </Mapping>
+    </edmx:Mappings>
+  </edmx:Runtime>
+  <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <Connection>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="MetadataArtifactProcessing" Value="EmbedInOutputAssembly" />
+      </DesignerInfoPropertySet>
+    </Connection>
+    <Options>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="ValidateOnBuild" Value="true" />
+        <DesignerProperty Name="EnablePluralization" Value="false" />
+        <DesignerProperty Name="IncludeForeignKeysInModel" Value="true" />
+        <DesignerProperty Name="UseLegacyProvider" Value="false" />
+        <DesignerProperty Name="CodeGenerationStrategy" Value="None" />
+      </DesignerInfoPropertySet>
+    </Options>
+    <!-- Diagram content (shape and connector positions) -->
+    <Diagrams></Diagrams>
+  </Designer>
+</edmx:Edmx>
